@@ -12,7 +12,7 @@
 // Declaring module ports
 module DFF(Q, Q_BAR, CLK, D, CLR);
     
-   output Q, Q_BAR;
+        output Q, Q_BAR;
 	input CLK, D, CLR;
 	wire CLR_BAR, CLK_BAR, D_BAR, CLR1, CLK1, D1, S_BAR, S, R, R_BAR;
 
