@@ -1,2 +1,2 @@
 # Verilog
- Contains Verilog projects
+ Contains Verilog projects - either school work or personal projects
