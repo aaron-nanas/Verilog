@@ -1,0 +1,30 @@
+/* Aaron Joseph Nanas
+*  ECE 526L
+*  Lab 6: Scalable Multiplexer
+*  Professor Mehran
+*/
+
+`timescale 1ns / 1ns
+
+module scalable_mux(A, B, SEL, OUT);
+    parameter SIZE = 1;
+    
+    input [SIZE-1:0] A, B;
+    input SEL;
+    output [SIZE-1:0] OUT;
+    integer i;
+    
+    // If SEL = 0, then the output is A
+    // If SEL = 1, then the output is B
+   always @(A or B or SEL) begin
+        if (!SEL) OUT = A;
+        else if (SEL) OUT = B;
+        else
+            // For loop to resolve conflicting bits
+            // If the bits are the same, output A; otherwise, output will be X
+            for (i = 0; i < SIZE; i = i + 1) begin
+                if (A[i] == B[i]) OUT[i] = A[i];
+                else OUT[i] = 1'bX; 
+            end
+    end
+endmodule

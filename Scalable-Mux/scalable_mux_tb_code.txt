@@ -1,0 +1,41 @@
+`timescale 1 ns / 1 ns
+`define MONITOR_STR "A = %b, B = %b SEL = %b | OUT1 = %b, OUT2 = %b, OUT3 = %b, OUT4 = %b"
+
+module scalable_mux_tb();
+    parameter SIZE = 6;
+    parameter DELAY = 10;
+    reg [SIZE-1:0] A;
+    reg [SIZE-1:0] B;
+    reg SEL;
+    wire [SIZE-1:0] OUT;
+
+    scalable_mux UUT1 (.A(A), .B(B), .SEL(SEL), .OUT(OUT)); // SIZE = 1
+    scalable_mux #(4) UUT2 (.A(A), .B(B), .SEL(SEL), .OUT(OUT)); // SIZE = 4
+    scalable_mux #(.SIZE(5)) UUT3 (.A(A), .B(B), .SEL(SEL), .OUT(OUT)); // SIZE = 5
+    scalable_mux #(SIZE) UUT4 (.A(A), .B(B), .SEL(SEL), .OUT(OUT)); // SIZE = 6
+    
+    initial $monitor("%d A = %b, B = %b, SEL = %b | OUT1 = %b, OUT2 = %b, OUT3 = %b, OUT4 = %b", $time, A, B, SEL, UUT1.OUT, UUT2.OUT, UUT3.OUT, UUT4.OUT);
+
+    initial begin
+       $vcdpluson;
+       $display("\nStarting the Simulation");
+       A <= 6'b010101; B <= 6'b111000; SEL <= 1'b0;
+       #(DELAY) SEL = 1'b1;
+
+       #(DELAY) A <= 6'b000111; B <= 6'b101010; SEL <= 1'b1;
+
+       #(DELAY) A <= 6'b111111; B <= 6'b000000; SEL <= 1'b0;
+      
+       #(DELAY) A <= 6'b100111; B <= 6'b000001; SEL <= 1'b1;
+
+       #(DELAY) A <= 6'b010111; B <= 6'b101110; SEL <= 1'b1;
+
+       #(DELAY) A <= 6'b010111; B <= 6'b010111; SEL <= 1'bX;
+
+       #(DELAY) A <= 6'b010111; B <= 6'b111110; SEL <= 1'bX;
+
+       #(DELAY) A <= 6'b101110; B <= 6'b101110; SEL <= 1'bX;
+
+       #(DELAY) $finish;
+  end
+endmodule
